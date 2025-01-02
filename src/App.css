@@ -1,6 +1,29 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  color: #CDD5E0;
+  font-size: 16px;
+}
+
+.github-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1rem 2rem 2rem 2rem;
+}
+
+.bg-img-cont {
+  position: relative;
+}
+
+.bg-img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+}
+
+.repository-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+  width: 100%;
+  margin-top: 50px;
 }

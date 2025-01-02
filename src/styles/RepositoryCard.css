@@ -1,0 +1,15 @@
+.repository-cont {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+
+	text-align: start;
+	background: linear-gradient(to right, #111729, #1D1B48);
+	padding: 20px;
+	border-radius: 12px
+}
+
+.repository-name {
+	font-size: 1.25rem;
+}
