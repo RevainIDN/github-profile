@@ -55,9 +55,9 @@
 	text-align: start;
 }
 
-.info-name {}
-
-.info-description {}
+.info-description {
+	color: #96a3b4;
+}
 
 @media (max-width: 1000px) {
 	.user-info-wrapper {
