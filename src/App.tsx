@@ -37,13 +37,33 @@ export default function App() {
   }
 
   useEffect(() => {
+    const storedUserInfo = localStorage.getItem('userInfo');
+    const storedUserRepository = localStorage.getItem('userRepository');
+
+    if (storedUserInfo) {
+      setUserInfo(JSON.parse(storedUserInfo));
+    }
+    if (storedUserRepository) {
+      setUserRepository(JSON.parse(storedUserRepository));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userInfo) {
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+    }
+    if (userRepository) {
+      localStorage.setItem('userRepository', JSON.stringify(userRepository));
+    }
+  }, [userInfo, userRepository]);
+
+  useEffect(() => {
     const fetchUserInfo = async () => {
       const response = await fetch(`https://api.github.com/users/${userText === '' ? 'github' : userText}`);
       if (!response.ok) {
-        throw new Error("Ошибка при загрузке данных");
+        throw new Error("Error loading data");
       }
       const data = await response.json();
-      console.log(data)
       const filteredData: InfoUserFiltered = {
         avatar_url: data.avatar_url,
         name: data.name,
@@ -59,7 +79,7 @@ export default function App() {
     const fetchUserRepository = async () => {
       const response = await fetch(`https://api.github.com/users/${userText === '' ? 'github' : userText}/repos`);
       if (!response.ok) {
-        throw new Error("Ошибка при загрузке данных");
+        throw new Error("Error loading data");
       }
       const repositories = await response.json();
       const filteredData: Array<RepositoryUserFiltered> = repositories.map((repository: RepositoryUserFiltered) => ({
@@ -80,7 +100,7 @@ export default function App() {
 
     fetchUserInfo();
     fetchUserRepository();
-  }, [userText])
+  }, [userText]);
 
   const renderAllRepositories = (userRepository: RepositoryUserFiltered[]) => {
     if (isAllRepositories === false) {
