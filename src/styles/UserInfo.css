@@ -37,21 +37,12 @@
 }
 
 .info-item span {
-	height: 100%;
 	position: relative;
-	margin-right: 30px;
+	height: 100%;
+	color: #4A5567;
 	border-right: 2px #4A5567 solid;
-	padding-right: 30px;
-}
-
-.info-item span::before {
-	content: '';
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 1px;
-	height: 80%;
-	background-color: #4A5567;
+	margin-right: 15px;
+	padding-right: 15px;
 }
 
 .info-title-cont {
