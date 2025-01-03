@@ -7,6 +7,8 @@ import RepositoryCard from './components/RepositoryCard'
 export default function App() {
   const [userInfo, setUserInfo] = useState<InfoUserFiltered | null>(null);
   const [userRepository, setUserRepository] = useState<RepositoryUserFiltered[] | null>(null);
+  const [isAllRepositories, setIsAllRepositories] = useState<boolean>(false);
+  const [userText, setUserText] = useState<string>('');
 
   interface InfoUserFiltered {
     avatar_url: string;
@@ -18,6 +20,12 @@ export default function App() {
     public_repos: number;
   }
 
+  interface LicenseInfo {
+    key: string;
+    name: string;
+    spdx_id: string;
+  }
+
   interface RepositoryUserFiltered {
     name: string;
     description: string | null;
@@ -25,15 +33,17 @@ export default function App() {
     stargazers_count: number;
     updated_at: string;
     html_url: string;
+    license: LicenseInfo | null;
   }
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      const response = await fetch(`https://api.github.com/users/github`);
+      const response = await fetch(`https://api.github.com/users/${userText === '' ? 'github' : userText}`);
       if (!response.ok) {
         throw new Error("Ошибка при загрузке данных");
       }
       const data = await response.json();
+      console.log(data)
       const filteredData: InfoUserFiltered = {
         avatar_url: data.avatar_url,
         name: data.name,
@@ -47,12 +57,11 @@ export default function App() {
     }
 
     const fetchUserRepository = async () => {
-      const response = await fetch(`https://api.github.com/users/github/repos`);
+      const response = await fetch(`https://api.github.com/users/${userText === '' ? 'github' : userText}/repos`);
       if (!response.ok) {
         throw new Error("Ошибка при загрузке данных");
       }
       const repositories = await response.json();
-      console.log(repositories);
       const filteredData: Array<RepositoryUserFiltered> = repositories.map((repository: RepositoryUserFiltered) => ({
         name: repository.name,
         description: repository.description,
@@ -60,21 +69,34 @@ export default function App() {
         stargazers_count: repository.stargazers_count,
         updated_at: repository.updated_at,
         html_url: repository.html_url,
+        license: repository.license ? {
+          key: repository.license?.key,
+          name: repository.license?.name,
+          spdx_id: repository.license?.spdx_id,
+        } : null
       }));
       setUserRepository(filteredData);
     }
 
     fetchUserInfo();
     fetchUserRepository();
-  }, [])
-  console.log(userInfo);
-  console.log(userRepository);
+  }, [userText])
+
+  const renderAllRepositories = (userRepository: RepositoryUserFiltered[]) => {
+    if (isAllRepositories === false) {
+      return userRepository.slice(0, 4)
+    } else {
+      return userRepository
+    }
+  }
 
   return (
     <>
       <div className='bg-img-cont'>
         <img className='bg-img' src="hero-image-github-profile.png" alt="" />
-        <SearchInput />
+        <SearchInput
+          setUserText={setUserText}
+        />
       </div>
       <div className='github-page'>
         {userInfo ? (
@@ -84,11 +106,18 @@ export default function App() {
         )}
         <div className='repository-list'>
           {userRepository ? (
-            <RepositoryCard userRepository={userRepository} />
+            <RepositoryCard
+              userRepository={userRepository}
+              renderAllRepositories={renderAllRepositories} />
           ) : (
             <p>Loading user repositories...</p>
           )}
         </div>
+        {isAllRepositories === false ? (
+          <button className='all-repositories-btn' onClick={() => setIsAllRepositories(true)}>View all repositories</button>
+        ) : (
+          null
+        )}
       </div>
     </>
   )
