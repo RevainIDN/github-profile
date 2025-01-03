@@ -19,7 +19,7 @@ export default function UserInfo({ userInfo }: InfoUserProps) {
 		<div className='user-info-cont'>
 			<div className='user-info-wrapper'>
 				<div className='user-icon-cont'>
-					<img className='user-icon' src={userInfo.avatar_url} alt="" />
+					<img className='user-icon' src={userInfo.avatar_url} alt="User icon" />
 				</div>
 				<ul className='info-list'>
 					<li className='info-item'><span>Followers</span>{userInfo.followers}</li>
@@ -28,8 +28,8 @@ export default function UserInfo({ userInfo }: InfoUserProps) {
 				</ul>
 			</div>
 			<div className='info-title-cont'>
-				<h1 className='info-name'>{userInfo.name}</h1>
-				<p className='info-description'>{userInfo.bio !== null ? userInfo.bio : 'User description missing :('}</p>
+				<h1 className='info-name'>{userInfo.name !== null ? userInfo.name : 'Username is missing'}</h1>
+				<p className='info-description'>{userInfo.bio !== null ? userInfo.bio : 'User description missing'}</p>
 			</div>
 		</div>
 
